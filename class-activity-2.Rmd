@@ -1,6 +1,7 @@
 ---
 title: "intro to viz"
 author: "Charles Lang"
+developer: "Jie Chen"
 date: "September 26, 2019"
 output: html_document
 ---
@@ -17,7 +18,7 @@ D2 <- filter(D1, schoolyear == 20112012)
 ```{r}
 #Generate a histogramof the percentage of free/reduced lunch students (frl_percent) at each school
 
-hist()
+#hist()
 
 #Change the number of breaks to 100, do you get the same impression?
 
@@ -80,14 +81,21 @@ pairs(D5)
 #pmax sets a maximum value, pmin sets a minimum value
 #round rounds numbers to whole number values
 #sample draws a random samples from the groups vector according to a uniform distribution
-
-
+library(dplyr)
+score <- rnorm(100, 75, 20)
+score <- pmax(score, 0)
+score <- pmin(score, 100)
+score <- round(score, digits = 0)
+score
+interest <- sample(c("sport", "music", "nature", "literature"), 100, replace = TRUE)
+student <- list(score = score, interest = interest)
 ```
 
 2. Using base R commands, draw a histogram of the scores. Change the breaks in your histogram until you think they best represent your data.
 
 ```{r}
-
+breaks = c(0,60,70,75,80,90,100)
+histogram <- hist(student$score, breaks = breaks)
 ```
 
 
@@ -95,7 +103,7 @@ pairs(D5)
 
 ```{r}
 #cut() divides the range of scores into intervals and codes the values in scores according to which interval they fall. We use a vector called `letters` as the labels, `letters` is a vector made up of the letters of the alphabet.
-
+letters <- cut(student$score, breaks = breaks)
 ```
 
 4. Now using the colorbrewer package (RColorBrewer; http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3) design a pallette and assign it to the groups in your data on the histogram.
@@ -108,7 +116,8 @@ library(RColorBrewer)
 #Make RColorBrewer palette available to R and assign to your bins
 
 #Use named palette in histogram
-
+palette1 <- brewer.pal(6, "OrRd")
+histogram <- hist(student$score, breaks = breaks, col = palette1)
 ```
 
 
@@ -116,7 +125,8 @@ library(RColorBrewer)
 
 ```{r}
 #Make a vector of the colors from RColorBrewer
-
+palette2 <- brewer.pal(4, "Spectral")
+boxplot(student$interest, names = c("sport", "music", "nature", "literature"), col = palette2)
 ```
 
 
